@@ -3,19 +3,20 @@
 	session_start();
 	include 'proses/config.php';
     
-	if(!isset($_SESSION['nama'])){
-        
-        if(empty($_SESSION['nama'])){
-            echo "<script>
-                alert('Tes');
-            </script>";
-        }
-
+	if(!empty($_SESSION['nama'])){
+        $nama = $_SESSION['nama'];
+        $sql = $conn -> query("SELECT * FROM chat order by id desc");
+           
     }
     else {
-        $nama = $_SESSION['nama'];
-        $sql = $conn -> query("SELECT * FROM chat");
+        
+        echo "<script>
+            alert('Anda Belum Login !');
+            window.location = 'index.php';
+        </script>";
     }
+
+
 
     
         
@@ -121,20 +122,11 @@
         </style>
     </head>
 
-    <body data-spy="scroll" data-target="#navbar-menu" data-offset="110">
+    <body data-spy="scroll" data-target="#navbar-menu" data-offset="110" onload="viewPesan()">
 
 
         <!-- Preloader -->
-        <div id="loading">
-            <div id="loading-center">
-                <div id="loading-center-absolute">
-                    <div class="object" id="object_one"></div>
-                    <div class="object" id="object_two"></div>
-                    <div class="object" id="object_three"></div>
-                    <div class="object" id="object_four"></div>
-                </div>
-            </div>
-        </div><!--End off Preloader -->
+        
 
 
         <div class="culmn">
@@ -192,6 +184,7 @@
 
             </nav>
 
+
             <!--Home Sections-->
             <section id="home" class="home bg-black fix ">
                 <div class="overlay"></div>
@@ -209,28 +202,22 @@
             </section> <!--End off Home Sections-->
 
 
-
             <!--Featured Section-->
             <section id="comment">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
                             <div class="tampilKomentar">
-                                <div class="isi">
-                                    <?php while ($rows=$sql -> fetch_assoc()) { ?>
-                                        <div class="tampilIsi"> 
-                                            <label><?php echo $rows['nama_user'] ?> : </label>
-                                            <br>
-                                            <span><?php echo $rows['isi'] ?>
-                                            <br>    
-                                            <p class="" style="text-align: right;" ><?php echo $rows['tanggal'] ?> </p></span>
-                                            <hr>   
-                                        </div>
-                                    <?php } ?>                                    
+                                <div class="isi" id="isiPesan" >                                    
                                 </div>
                                 <div class="inputPesan">
                                     <center>    
-                                    <input type="" name="" class="textPesan" placeholder="Text Here ...">
+                                    
+                                    <input type="text" name="inputPesan" class="textPesan" placeholder="Text Here ...">
+                                    <input type="hidden" name="" id="nama" value="<?php echo $nama ?>" >
+                                    <button type="submit" onclick="kirimPesan()">Kirim</button>
+                                    
+
                                     </center>
                                 </div>  
                             </div>
@@ -238,12 +225,6 @@
                     </div>  
                 </div>  
             </section>
-
-
-            <!--Brand Section-->
-            <!-- End off Brand section -->
-
-
 
             <!--Test section-->
             
@@ -388,6 +369,36 @@
 
         <script src="assets/js/plugins.js"></script>
         <script src="assets/js/main.js"></script>
+        
+        <script>
+            function kirimPesan(){
+                var pesan = $('.textPesan').val();
+                var nama = $('#nama').val();
+
+                $.ajax({
+                    type: "POST",
+                    url : "proses/proses-komentar.php",
+                    data : "nama="+nama+"&pesan="+pesan,
+                    success : function(data){
+                        viewPesan();
+                    }
+                });
+
+            }
+
+            function viewPesan(){
+                $.ajax({
+                    type : 'GET',
+                    url  : 'proses/tampilPesan.php',
+                    success : function(data){
+                        $('#isiPesan').html(data);
+                    }
+                })
+            }
+
+
+            
+        </script>
 
     </body>
 </html>

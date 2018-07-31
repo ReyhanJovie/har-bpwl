@@ -84,16 +84,7 @@
 
 
         <!-- Preloader -->
-        <div id="loading">
-            <div id="loading-center">
-                <div id="loading-center-absolute">
-                    <div class="object" id="object_one"></div>
-                    <div class="object" id="object_two"></div>
-                    <div class="object" id="object_three"></div>
-                    <div class="object" id="object_four"></div>
-                </div>
-            </div>
-        </div><!--End off Preloader -->
+        <!--End off Preloader -->
 
 
         <div class="culmn">
@@ -134,8 +125,8 @@
                             <li><a href="proses/login.php">Sign Up</a></li>	
 
                             <?php elseif ($_SESSION['nama']) : ?>
-
-							<li class="menu-dropdown">
+                            
+							<li>
                             <a href="proses/logout.php"><?php echo $nama ?> (Logout)</a>
                             </li>             
 
@@ -171,6 +162,7 @@
                                             </div>
 
                                             <div class="home_btns m-top-40">
+                                                
                                                 <a href="" class="btn btn-default m-top-20">Go !</a>
                                             </div>
                                         </div>
