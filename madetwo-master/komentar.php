@@ -84,7 +84,7 @@
                 border: 1px solid #7dbb26;
                 margin-top: 50px;
                 /*border-radius: 10px 10px 0 0;*/
-                /*padding: 100px 0;*/
+                padding: 20px 0;
             }
 
             .tampilKomentar .isi{
@@ -93,22 +93,24 @@
                 /*border-radius: 10px 10px 0 0;*/
                 /*padding: 20px;*/
                 overflow-y: scroll;
+                overflow-x: hidden;
             }
+
+
 
             .tampilKomentar .inputPesan{
                 background: #7dbb26;
                 position: relative;
                 top: 8px;
                 padding: 10px;
-                left: 0px;
-                width: 100.1%;
+                left: -1px;
+                width: 100.2%;
 
             }
 
             .tampilIsi{
-                padding: 0 20px;
-
-                
+                padding: 10px 20px;
+                font-family: cursive;
             }
 
             .textPesan{
@@ -116,7 +118,7 @@
                 border: 1px solid #7dbb26; 
                 width: 90%;
                 height: 40px;
-                
+                padding: 0 30px;
             }
 
         </style>
@@ -213,9 +215,10 @@
                                 <div class="inputPesan">
                                     <center>    
                                     
-                                    <input type="text" name="inputPesan" class="textPesan" placeholder="Text Here ...">
+                                    <input type="text" name="inputPesan" class="textPesan" onkeydown="if(event.keyCode == 13){ kirimPesan(); 
+                                    }" placeholder="Text Here ..." id="txtPesan">
                                     <input type="hidden" name="" id="nama" value="<?php echo $nama ?>" >
-                                    <button type="submit" onclick="kirimPesan()">Kirim</button>
+                                    
                                     
 
                                     </center>
@@ -371,9 +374,13 @@
         <script src="assets/js/main.js"></script>
         
         <script>
+            $(document).ready(function(){
+                $('#txtPesan').focus();
+            })
             function kirimPesan(){
                 var pesan = $('.textPesan').val();
                 var nama = $('#nama').val();
+
 
                 $.ajax({
                     type: "POST",
@@ -381,9 +388,15 @@
                     data : "nama="+nama+"&pesan="+pesan,
                     success : function(data){
                         viewPesan();
+                        $('#txtPesan').reset();
                     }
                 });
+                
 
+            }
+
+            function reset(){
+                $('#txtPesan').reset();
             }
 
             function viewPesan(){
@@ -392,7 +405,7 @@
                     url  : 'proses/tampilPesan.php',
                     success : function(data){
                         $('#isiPesan').html(data);
-                    }
+                     }
                 })
             }
 
